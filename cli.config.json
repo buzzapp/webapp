@@ -1,0 +1,6 @@
+{
+  "component_dir": "src/components",
+	"mixin_dir": "src/mixins",
+	"service_dir": "src/services"
+}
+							

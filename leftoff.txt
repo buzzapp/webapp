@@ -1,0 +1,5 @@
+so im finishing up the auth service.
+The check auth function should send a request to the user service
+to check if the token is still valid. Also I needed to come up with an implementation
+for the refresh token method. Maybe I can create a javascript api for each service I create
+Like Helm. I need to create a mixin for auth components.
