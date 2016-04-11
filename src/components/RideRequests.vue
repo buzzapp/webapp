@@ -36,7 +36,7 @@
 
       var channel = pusher.subscribe('request_channel');
       channel.bind('ride-requested', function(data) {
-        self.requests.push(data);
+        self.requests.unshift(data);
       });
 
       channel.bind('ride-accepted', function(data) {
