@@ -70,8 +70,8 @@
             <tr>
               <th>Username</th>
               <th>Request ID</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
+              <th>From</th>
+              <th>To</th>
               <th>Request Time</th>
               <th>Action</th>
             </tr>
@@ -80,8 +80,8 @@
             <tr v-for="request in requests">
               <td>{{request.user.username}}</td>
               <td>{{request.id}}</td>
-              <td>{{request.latitude}}</td>
-              <td>{{request.longitude}}</td>
+              <td>{{request.from_address}}</td>
+              <td>{{request.to_address}}</td>
               <td>{{request.created_at}}</td>
               <td>
                 <button type="button" class="button success" name="button" @click="accept(request.id)">ACCEPT</button>
