@@ -3,6 +3,7 @@ import scss from './app.scss'
 import Vue from 'vue'
 import Resource from 'vue-resource'
 import Router from 'vue-router'
+import selectize from 'vue-selectize';
 
 import App from './components/App.vue'
 import Home from './components/Home.vue'
@@ -15,6 +16,7 @@ import auth from './services/auth';
 // Install plugins
 Vue.use(Router)
 Vue.use(Resource)
+Vue.use(selectize);
 
 // Check the users auth status when the app starts
 auth.checkAuth(Vue)

@@ -127,6 +127,4 @@ function updateUserToLoggedIn(self, token) {
   self.user.username = decodedJWT.username;
   self.user.id = decodedJWT.sub;
   self.user.role = decodedJWT.role;
-
-  console.log(self.user);
 }

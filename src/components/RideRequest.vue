@@ -1,5 +1,4 @@
 <script>
-
   var apiKey = 'AIzaSyB6JE1PeWH7P74oHeJXhQY5anWgH33Pwyk';
 
   import Notification from './Notification.vue';
@@ -23,7 +22,9 @@
         notificationType: '',
         notificationMessage: '',
         fromAddr: '',
-        toAddr: ''
+        toAddr: '',
+        results: [],
+        selectedToAdd: ''
       }
     },
 
@@ -71,19 +72,46 @@
       getCurrentLocation() {
         var self = this;
 
-        self.$set('fromAddr', 'Getting current location...');
+        document.getElementById('fromAddress').placeholder = 'Getting current location...';
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-              self.$http.get('https://maps.googleapis.com/maps/api/geocode/json?latlng='+position.coords.latitude+','+position.coords.longitude+'&key=' + apiKey).then(function(resp){
-                self.$set('fromAddr', resp.data.results[0].formatted_address);
-              }, function(resp){
-                console.log(resp);
-              });
+                var geocoder = new google.maps.Geocoder;
+                var latlng = {lat: position.coords.latitude, lng: position.coords.longitude};
+                geocoder.geocode({'location': latlng}, function(results, status) {
+                  if (status === google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                      self.$set('fromAddr', results[0].formatted_address);
+                    } else {
+                      window.alert('No results found');
+                    }
+                  } else {
+                    window.alert('Geocoder failed due to: ' + status);
+                  }
+                });
             });
         } else {
             alert("Geolocation is not supported by this browser.");
         }
+      },
+
+      autoComplete() {
+        var self = this;
+
+        var service = new google.maps.places.AutocompleteService();
+        service.getQueryPredictions({ input: self.toAddr }, function(predictions, status){
+          if (status != google.maps.places.PlacesServiceStatus.OK) {
+            alert(status);
+            return;
+          }
+
+          self.$set('results', predictions);
+        });
+      },
+
+      selectToAddress(result) {
+        this.$set('toAddr', result);
+        this.$set('results', []);
       }
     }
   }
@@ -95,8 +123,13 @@
       <div class="small-12 medium-6  medium-offset-3 columns">
         <notification :notify="notify" :notification-type="notificationType" :notification-message="notificationMessage"></notification>
         <panel title="Ride Request">
-          <input type="text" v-model="fromAddr" placeholder="From address" v-on:focus="getCurrentLocation()">
-          <input type="text" v-model="toAddr" placeholder="To address">
+          <input type="text" v-model="fromAddr" id="fromAddress" placeholder="From address" v-on:focus="getCurrentLocation()">
+          <input type="text"  v-model="toAddr" placeholder="To address" v-on:keyup="autoComplete()">
+          <div class="results" v-if="results.length > 0">
+            <p v-for="result in results" @click="selectToAddress(result.description)">
+              {{result.description}}
+            </p>
+          </div>
           <button type="button"  class="button success" name="button" @click="requestRide()">REQUEST RIDE</button>
         </panel>
       </div>
