@@ -56,6 +56,10 @@
             self.$set('notify', true);
             self.$set('notificationType', 'success');
             self.$set('notificationMessage', 'Request was made!');
+
+            // Clear out fields
+            self.$set('fromAddr', '');
+            self.$set('toAddr', '');
           }
 
           setTimeout(function(){
