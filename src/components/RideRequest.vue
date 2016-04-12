@@ -34,6 +34,10 @@
       requestRide() {
         var self = this;
 
+        self.$set('notify', true);
+        self.$set('notificationType', 'success');
+        self.$set('notificationMessage', 'Requesting....');
+
         // do some validation
         if (self.fromAddr == '' || self.toAddr == '') {
           self.$set('notify', true);
@@ -81,7 +85,7 @@
 
         var clear;
 
-        clear = setInterval(function(){
+        setTimeout(function(){
           if(fromAddr != undefined || toAddr != undefined) {
             ride.request(self, self.user.id, fromAddr, toAddr).then(function(resp){
               // check for erros
@@ -97,6 +101,8 @@
                 // Clear out fields
                 self.$set('fromAddr', '');
                 self.$set('toAddr', '');
+                document.getElementById('fromAddress').placeholder = 'From Address';
+                document.getElementById('requestBtn').value = 'REQUEST RIDE';
               }
 
               setTimeout(function(){
@@ -106,7 +112,7 @@
               clearInterval(clear);
             });
           }
-        }, 100);
+        }, 800);
       },
 
       getCurrentLocation() {
@@ -170,7 +176,7 @@
               {{result.description}}
             </p>
           </div>
-          <button type="button"  class="button success" name="button" @click="requestRide()">REQUEST RIDE</button>
+          <button type="button" id="requestBtn"  class="button success" name="button" @click="requestRide()">REQUEST RIDE</button>
         </panel>
       </div>
     </div>
