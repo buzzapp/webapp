@@ -26,7 +26,7 @@
 
       <!--  LOGGED IN ROUTES-->
       <li v-if="user.role == 'student'" class="nav-item"><a v-link="{name: 'ride-request'}">Ride Request</a></li>
-      <li v-if="user.role == 'driver'" class="nav-item"><a v-link="{name: 'ride-requests'}">Ride Request</a></li>
+      <li v-if="user.role == 'driver'" class="nav-item"><a v-link="{name: 'ride-requests'}">Ride Requests</a></li>
       <li v-if="user.authenticated" class="nav-item"><a @click="logout()">Logout</a></li>
     </ul>
   </div>

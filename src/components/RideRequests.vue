@@ -63,8 +63,6 @@
 
 <template>
   <div id="rideRequestsWrapper">
-    <div class="row">
-      <div class="small-12 columns">
         <table class="table">
           <thead>
             <tr>
@@ -73,6 +71,7 @@
               <th>From</th>
               <th>To</th>
               <th>Request Time</th>
+              <th>#</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -80,8 +79,9 @@
             <tr v-for="request in requests">
               <td>{{request.user.username}}</td>
               <td>{{request.id}}</td>
-              <td>{{request.from_address}}</td>
-              <td>{{request.to_address}}</td>
+              <td>{{request.from_address.latitude}}, {{request.from_address.longitude}}</td>
+              <td>{{request.to_address.latitude}}, {{request.to_address.longitude}}</td>
+              <td><a v-link="{ name: 'directions', params: { requestID: request.id }}">View Route</a></td>
               <td>{{request.created_at}}</td>
               <td>
                 <button type="button" class="button success" name="button" @click="accept(request.id)">ACCEPT</button>
@@ -89,8 +89,6 @@
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
   </div>
 </template>
 

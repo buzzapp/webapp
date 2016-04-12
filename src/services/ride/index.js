@@ -39,5 +39,15 @@ export default {
             }, function(resp) {
                 return resp;
             });
+        },
+
+        getByID(ctx, id) {
+          var url = RIDE_BASE_URL + '/requests/' + id;
+
+          return ctx.$http.get(url, {headers: {Authorization: 'Bearer ' + localStorage.getItem('token')}}).then(function(resp) {
+              return resp;
+          }, function(resp) {
+              return resp;
+          });
         }
 }

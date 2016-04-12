@@ -6,6 +6,7 @@ import Router from 'vue-router'
 import selectize from 'vue-selectize';
 
 import App from './components/App.vue'
+import Directions from './components/Directions.vue'
 import Home from './components/Home.vue'
 import Login from './components/Login.vue'
 import RideRequest from './components/RideRequest.vue'
@@ -41,6 +42,10 @@ router.map({
   '/ride-requests':{
     name: 'ride-requests',
     component: RideRequests
+  },
+  '/directions/:requestID':{
+    name: 'directions',
+    component: Directions
   }
 })
 

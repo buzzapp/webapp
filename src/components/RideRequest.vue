@@ -47,26 +47,66 @@
           return
         }
 
-        ride.request(this, self.user.id, self.fromAddr, self.toAddr).then(function(resp){
-          // check for erros
-          if(resp.data.message) {
-            self.$set('notify', true);
-            self.$set('notificationType', 'alert');
-            self.$set('notificationMessage', resp.data.message);
+        /**************** CLEAN THIS UP *****************/
+
+        var fromAddr;
+        var toAddr;
+
+        // get the lat and long of each address
+        // maybe this portion can be moved to the service itself
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': self.fromAddr}, function(results, status){
+          if (status == google.maps.GeocoderStatus.OK) {
+            fromAddr = {
+              'latitude': results[0].geometry.location.lat(),
+              'longitude': results[0].geometry.location.lng()
+            }
           } else {
-            self.$set('notify', true);
-            self.$set('notificationType', 'success');
-            self.$set('notificationMessage', 'Request was made!');
-
-            // Clear out fields
-            self.$set('fromAddr', '');
-            self.$set('toAddr', '');
+            alert("Geocode was not successful for the following reason: " + status);
           }
-
-          setTimeout(function(){
-            self.$set('notify', false);
-          }, 3000);
         });
+
+        geocoder.geocode({'address': self.toAddr}, function(results, status){
+          if (status == google.maps.GeocoderStatus.OK) {
+            toAddr = {
+              'latitude': results[0].geometry.location.lat(),
+              'longitude': results[0].geometry.location.lng()
+            }
+          } else {
+            alert("Geocode was not successful for the following reason: " + status);
+          }
+        });
+
+        /***********************************************/
+
+        var clear;
+
+        clear = setInterval(function(){
+          if(fromAddr != undefined || toAddr != undefined) {
+            ride.request(self, self.user.id, fromAddr, toAddr).then(function(resp){
+              // check for erros
+              if(resp.data.message) {
+                self.$set('notify', true);
+                self.$set('notificationType', 'alert');
+                self.$set('notificationMessage', resp.data.message);
+              } else {
+                self.$set('notify', true);
+                self.$set('notificationType', 'success');
+                self.$set('notificationMessage', 'Request was made!');
+
+                // Clear out fields
+                self.$set('fromAddr', '');
+                self.$set('toAddr', '');
+              }
+
+              setTimeout(function(){
+                self.$set('notify', false);
+              }, 3000);
+
+              clearInterval(clear);
+            });
+          }
+        }, 100);
       },
 
       getCurrentLocation() {
